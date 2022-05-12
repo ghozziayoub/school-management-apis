@@ -12,4 +12,8 @@ npm = yarn : js package managers
 
 express
 - creation d'un serveur ( listen )
-- creation des APIs 
+- creation des APIs ( GET , POST , PUT/PATCH , DELETE )
+
+REQUETTE HTTP :
+-- METHODE => HEAD , PARAMS , BODY [ OBJECT ou ARRAY ] ( POST , PUT/PATCH )
+-- XML , JSON
