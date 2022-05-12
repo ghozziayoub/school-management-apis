@@ -9,3 +9,7 @@ global , local => Global => @angular/cli
 npm i esm-el-bibliotheque
 
 npm = yarn : js package managers
+
+express
+- creation d'un serveur ( listen )
+- creation des APIs 
