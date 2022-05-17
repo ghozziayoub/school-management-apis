@@ -14,6 +14,12 @@ express
 - creation d'un serveur ( listen )
 - creation des APIs ( GET , POST , PUT/PATCH , DELETE )
 
+REST PROTOCOL => REST API => RESTful APIs
+- RPC
+- GRPC
+- GraphQL
+- SOAP ( xml )
+
 REQUETTE HTTP :
 -- METHODE => HEAD , PARAMS , BODY [ OBJECT ou ARRAY ] ( POST , PUT/PATCH )
 -- XML , JSON

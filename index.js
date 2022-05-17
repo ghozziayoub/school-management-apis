@@ -4,6 +4,9 @@ const express = require("express")
 // creation d'un objet express
 const app = express()
 
+// autorisé les données de type JSON
+app.use(express.json())
+
 const port = 3000
 
 app.get("/a3tini-donnee/:userId", (req, res) => {
@@ -30,6 +33,15 @@ app.get("/a3tini-donnee/:userId", (req, res) => {
     }
 
 
+})
+
+app.post("/register", (req, res) => {
+
+    let user = req.body
+
+    console.log("index-L42", user);
+
+    res.status(200).send({ message: "register works !" })
 })
 
 // create server
