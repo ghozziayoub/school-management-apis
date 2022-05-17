@@ -5,7 +5,7 @@ const express = require("express")
 const trainerController = require("./controllers/trainerController")
 const trainingController = require("./controllers/trainingController")
 
-// creation d'un objet express
+// creation d'un objet express .
 const app = express()
 const port = 3000
 
