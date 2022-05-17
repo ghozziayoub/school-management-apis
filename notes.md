@@ -21,3 +21,6 @@ REQUETTE HTTP :
 // APIS => METHODE + /ROUTE-NAME ++ FUNCTION
 // p1 => object => Request
 // p2 => object => Response
+
+nodemon
+- restart auto when ctrl + s
