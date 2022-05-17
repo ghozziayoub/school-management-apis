@@ -1,22 +1,20 @@
-// import
+// import libs
 const express = require("express")
+
+// import controllers (1)
+const trainerController = require("./controllers/trainerController")
+const trainingController = require("./controllers/trainingController")
 
 // creation d'un objet express .
 const app = express()
-
 const port = 3000
 
-app.get("/a3tini-donnee", (req, res) => {
+// autorisé les données de type JSON
+app.use(express.json())
 
-    let users = [
-        { name: "ali", age: "50" },
-        { name: "mohamed", age: "30" },
-        { name: "salah", age: "60" },
-    ]
-
-    res.status(200).send(users)
-
-})
+// router
+app.use("/trainer", trainerController)
+app.use("/training", trainingController)
 
 // create server
 app.listen(port, () => { console.log(`🟢 Server started on port ${port}`); })
