@@ -1,7 +1,7 @@
 // import
 const express = require("express")
 
-// creation d'un objet express
+// creation d'un objet express .
 const app = express()
 
 const port = 3000
