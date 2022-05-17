@@ -6,15 +6,29 @@ const app = express()
 
 const port = 3000
 
-app.get("/a3tini-donnee", (req, res) => {
+app.get("/a3tini-donnee/:userId", (req, res) => {
 
-    let users = [
-        { name: "ali", age: "50" },
-        { name: "mohamed", age: "30" },
-        { name: "salah", age: "60" },
-    ]
+    let myId = req.params.userId
 
-    res.status(200).send(users)
+    if (isNaN(myId)) {
+        res.status(400).send({ message: "Invalid ID !" })
+    } else {
+
+        let users = [
+            { id: 1, name: "ali", age: "50" },
+            { id: 2, name: "mohamed", age: "30" },
+            { id: 3, name: "salah", age: "60" },
+        ]
+
+        let user = users.find((u) => { return u.id == myId })
+
+        if (user) {
+            res.status(200).send(user)
+        } else {
+            res.status(404).send({ message: "user not found" })
+        }
+    }
+
 
 })
 
