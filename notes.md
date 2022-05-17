@@ -17,3 +17,7 @@ express
 REQUETTE HTTP :
 -- METHODE => HEAD , PARAMS , BODY [ OBJECT ou ARRAY ] ( POST , PUT/PATCH )
 -- XML , JSON
+
+// APIS => METHODE + /ROUTE-NAME ++ FUNCTION
+// p1 => object => Request
+// p2 => object => Response

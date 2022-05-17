@@ -6,9 +6,6 @@ const app = express()
 
 const port = 3000
 
-// APIS => METHODE + /ROUTE-NAME ++ FUNCTION
-// p1 => object => Request
-// p2 => object => Response
 app.get("/a3tini-donnee", (req, res) => {
 
     let users = [
@@ -21,4 +18,5 @@ app.get("/a3tini-donnee", (req, res) => {
 
 })
 
+// create server
 app.listen(port, () => { console.log(`🟢 Server started on port ${port}`); })
