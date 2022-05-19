@@ -13,4 +13,8 @@ app.get('/', (req, res) => {
 app.get('/:id', (req, res) => {
   res.status(200).send({ message: "display par Id!" })
 })
+
+app.patch('/:id', (req, res) => {
+  res.status(200).send({ message: "update users!" })
+})
 module.exports = app
