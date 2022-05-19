@@ -5,7 +5,11 @@ const express = require("express")
 const trainersController = require("./controllers/trainersController")
 const trainingsController = require("./controllers/trainingsController")
 const messagesController = require("./controllers/messagesController")
-    // creation d'un objet express .
+const categoriesController = require("./controllers/categoriesController")
+const usersController = require("./controllers/usersController")
+
+
+// creation d'un objet express .
 const app = express()
 const port = 3000
 
@@ -16,5 +20,8 @@ app.use(express.json())
 app.use("/trainers", trainersController)
 app.use("/trainings", trainingsController)
 app.use("/messages", messagesController)
-    // create server
+app.use("/categories", categoriesController)
+app.use("/users", usersController)
+
+// create server
 app.listen(port, () => { console.log(`🟢 Server started on port ${port}`); })
