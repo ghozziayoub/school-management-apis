@@ -16,7 +16,7 @@ app.use(express.json())
 // router
 app.use("/trainers", trainersController)
 app.use("/trainings", trainingsController)
-app.use("/categories", categoriesController )
+app.use("/categories", categoriesController)
 
 // create server
 app.listen(port, () => { console.log(`🟢 Server started on port ${port}`); })
