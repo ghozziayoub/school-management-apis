@@ -16,4 +16,8 @@ app.patch('/:id', (req, res) => {
     res.status(200).send({ message: "modifier catgories par id !" })
 })
 
+app.delete('/:id', (req, res) => {
+    res.status(200).send({ message: "supprimer catgories par id !" })
+})
+
 module.exports = app
