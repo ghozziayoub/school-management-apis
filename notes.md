@@ -50,10 +50,12 @@ let user
 
 ---- 
 main features
-- Gestion des formateurs
-- Gestion des formations
-- Gestion des categories
-- Gestion des utilisateurs
+- Gestion des formateurs "/trainers"
+- Gestion des formations "/trainings"
+- Gestion des categories "/categories"
+- Gestion des utilisateurs "/users"
+- Gestion des messageries "/messages"
+
 -- Gestion => 
 ajouter : POST "/" , http://localhost:3000/trainer/ 
 afficher tous : GET "/" , 
