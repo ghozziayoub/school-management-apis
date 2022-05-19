@@ -19,5 +19,8 @@ app.get('/', (req, res) => {
 app.get('/all', (req, res) => {
     res.status(200).send({ message: "Get all Training works !" })
 })
+app.get('/:id', (req, res) => {
+    res.status(200).send({ message: "Get by id Training works !" })
+})
 
 module.exports = app
