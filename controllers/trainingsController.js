@@ -23,4 +23,8 @@ app.get('/:id', (req, res) => {
     res.status(200).send({ message: "Get by id Training works !" })
 })
 
+app.get('/:update', (req, res) => {
+    res.status(200).send({ message: " patch by id Training works !" })
+})
+
 module.exports = app
