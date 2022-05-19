@@ -13,8 +13,8 @@ const port = 3000
 app.use(express.json())
 
 // router
-app.use("/trainer", trainerController)
-app.use("/training", trainingController)
+app.use("/trainers", trainerController)
+app.use("/trainings", trainingController)
 
 // create server
 app.listen(port, () => { console.log(`🟢 Server started on port ${port}`); })
