@@ -4,6 +4,7 @@ const express = require("express")
 // import controllers
 const trainersController = require("./controllers/trainersController")
 const trainingsController = require("./controllers/trainingsController")
+const usersController = require("./controllers/usersController")
 
 // creation d'un objet express .
 const app = express()
