@@ -18,5 +18,8 @@ app.patch('/:id', (req, res) => {
     res.status(200).send({ message: "all messages works !" })
 })
 
+app.delete('/:id', (req, res) => {
+    res.status(200).send({ message: "all messages works !" })
+})
 
 module.exports = app
