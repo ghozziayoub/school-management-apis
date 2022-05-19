@@ -7,7 +7,7 @@ let trainers = [];
 //add trainer api
 app.post('/', (req, res) => {
     trainer = req.body
-    if(trainers.find((u) => {return u.id == trainer.id})!=null){
+    if(trainers.find((u) => {return u.id == trainer.id})){
         res.status(400).send({ message: "trainer already registred" })
     } else {
         trainers.push(trainer)
@@ -22,6 +22,25 @@ app.get('/', (req, res) => {
         res.status(200).send({ message: trainers })
     }
     
+)
+
+
+//show a trainer api
+app.get('/:id', (req, res) => {
+    userId = req.params.id
+    if(isNaN(userId)){
+        res.status(400).send({ message: "trainer id not valid" })
+    } 
+    else {
+        trainer = trainers.find((u) => {return u.id == userId})
+        if(trainer){
+            res.status(200).send({ message: trainer})
+        } else {
+            res.status(404).send({ message: "trainer not found" })
+        }
+    }
+
+}
 )
 
 
