@@ -1,23 +1,20 @@
 const mongoose = require("mongoose")
 
 const messagesSchema = new mongoose.Schema({
-    firstname: {
+    sender: {
         type: String,
         required: true
     },
-    lastname: {
+    tittel: {
         type: String,
         required: true
     },
-    email: {
+    content: {
         type: String,
         required: true,
-        unique: true
+
     },
-    password: {
-        type: String,
-        required: true
-    },
+
 })
 
 const message = mongoose.model("message", messagesSchema)
