@@ -12,5 +12,8 @@ app.get('/', (req, res) => {
 app.get('/:id', (req, res) => {
     res.status(200).send({ message: "afficher catgories par id !" })
 })
+app.patch('/:id', (req, res) => {
+    res.status(200).send({ message: "modifier catgories par id !" })
+})
 
 module.exports = app
