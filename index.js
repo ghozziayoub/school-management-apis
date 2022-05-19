@@ -4,6 +4,7 @@ const express = require("express")
 // import controllers
 const trainersController = require("./controllers/trainersController")
 const trainingsController = require("./controllers/trainingsController")
+const messagesController = require("./controllers/messagesController")
 const categoriesController = require("./controllers/categoriesController")
 const usersController = require("./controllers/usersController")
 
@@ -18,6 +19,7 @@ app.use(express.json())
 // router
 app.use("/trainers", trainersController)
 app.use("/trainings", trainingsController)
+app.use("/messages", messagesController)
 app.use("/categories", categoriesController)
 app.use("/users", usersController)
 
