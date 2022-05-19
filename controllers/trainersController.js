@@ -44,7 +44,7 @@ app.get('/:id', (req, res) => {
 )
 
 
-//modify a spesific trainer apo
+//modify a spesific trainer api
 app.patch('/:id', (req, res) => {
     userId = req.params.id
     trainer = req.body
@@ -56,6 +56,25 @@ app.patch('/:id', (req, res) => {
         if(trainers[indexOf]){
             trainers[indexOf] = trainer;
             res.status(404).send({ message: trainer })
+        } else {
+            res.status(404).send({ message: "trainer not found" })
+        }
+    }
+}
+)
+
+
+//delete a spesific trainer api
+app.delete('/:id', (req, res) => {
+    userId = req.params.id
+    if(isNaN(userId)){
+        res.status(400).send({ message: "trainer id not valid" })
+    } 
+    else {
+        indexOf = trainers.findIndex((u) => {return u.id == userId})
+        if(trainers[indexOf]){    
+            trainers.splice(indexOf, 1)  
+            res.status(200).send({ message: "trainer deleted succflully" })
         } else {
             res.status(404).send({ message: "trainer not found" })
         }
