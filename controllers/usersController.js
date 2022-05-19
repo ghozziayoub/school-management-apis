@@ -17,4 +17,8 @@ app.get('/:id', (req, res) => {
 app.patch('/:id', (req, res) => {
   res.status(200).send({ message: "update users!" })
 })
+
+app.delete('/:id', (req, res) => {
+  res.status(200).send({ message: "delete users!" })
+})
 module.exports = app
