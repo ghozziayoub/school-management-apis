@@ -47,3 +47,16 @@ let user
         } else {
             res.status(404).send({ message: "user not found" })
         }
+
+---- 
+main features
+- Gestion des formateurs
+- Gestion des formations
+- Gestion des categories
+- Gestion des utilisateurs
+-- Gestion => 
+ajouter : POST "/" , http://localhost:3000/trainer/ 
+afficher tous : GET "/" , 
+afficher par id : GET "/:id", 
+modifier : PATCH "/:id", 
+supprimer : DELETE "/:id"
