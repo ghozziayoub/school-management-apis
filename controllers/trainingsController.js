@@ -16,6 +16,9 @@ app.patch('/:id', (req, res) => {
     res.status(200).send({ message: " patch by id Training works !" })
 })
 
+app.delete('/:id', (req, res) => {
+    res.status(200).send({ message: "delete by id Training works !" })
+})
 
 
 
