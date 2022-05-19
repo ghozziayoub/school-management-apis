@@ -17,6 +17,14 @@ app.post('/', (req, res) => {
 })
 
 
+//show all trainers api
+app.get('/', (req, res) => {
+        res.status(200).send({ message: trainers })
+    }
+    
+)
+
+
 
 
 
