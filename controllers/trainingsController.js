@@ -8,6 +8,10 @@ app.Post('/', (req, res) => {
 app.get('/', (req, res) => {
     res.status(200).send({ message: "Get all Training works !" })
 })
+app.get('/:id', (req, res) => {
+    res.status(200).send({ message: "Get by id Training works !" })
+})
+
 
 
 
