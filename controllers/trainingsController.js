@@ -26,5 +26,9 @@ app.get('/:id', (req, res) => {
 app.get('/:update', (req, res) => {
     res.status(200).send({ message: " patch by id Training works !" })
 })
+app.get('/:Delete', (req, res) => {
+    res.status(200).send({ message: "delete by id Training works !" })
+})
+
 
 module.exports = app
