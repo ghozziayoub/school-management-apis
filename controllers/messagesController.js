@@ -14,4 +14,9 @@ app.get('/:id', (req, res) => {
     res.status(200).send({ message: "all messages works !" })
 })
 
+app.patch('/:id', (req, res) => {
+    res.status(200).send({ message: "all messages works !" })
+})
+
+
 module.exports = app
