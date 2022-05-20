@@ -5,7 +5,22 @@ const trainingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-   
+    Objectif: {
+        type: String,
+        required: true
+    },
+    program: {
+        type: String,
+        required: true,
+    },
+    hours: {
+        type: String,
+        required: true
+    },
+    idTrainer :{
+        type :String,
+        required: true
+    }
 })
 
 const training = mongoose.model("training", TrainingSchema)
