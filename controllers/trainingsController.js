@@ -2,7 +2,7 @@ const express = require("express")
 
 const app = express()
 
-app.Post('/', (req, res) => {
+app.post('/', (req, res) => {
     res.status(200).send({ message: "Post Training !" })
 })
 app.get('/', (req, res) => {

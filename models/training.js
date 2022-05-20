@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const trainingSchema = new mongoose.Schema({
+const TrainingSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -11,7 +11,7 @@ const trainingSchema = new mongoose.Schema({
     },
     program: {
         type: String,
-        required: true,
+        required: true
     },
     hours: {
         type: String,
@@ -19,10 +19,11 @@ const trainingSchema = new mongoose.Schema({
     },
     idTrainer :{
         type :String,
-        required: true
+        required: true,
+        unique: true
     }
 })
 
-const training = mongoose.model("training", TrainingSchema)
+const Training = mongoose.model("training", TrainingSchema)
 
 module.exports = TrainingSchema
