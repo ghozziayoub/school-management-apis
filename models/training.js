@@ -14,16 +14,15 @@ const TrainingSchema = new mongoose.Schema({
         required: true
     },
     hours: {
-        type: String,
+        type: Number,
         required: true
     },
     idTrainer :{
         type :String,
         required: true,
-        unique: true
     }
 })
 
 const Training = mongoose.model("training", TrainingSchema)
 
-module.exports = TrainingSchema
+module.exports = Training
