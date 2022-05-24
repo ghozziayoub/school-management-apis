@@ -1,4 +1,5 @@
 const express = require("express")
+const bcrypt = require("bcryptjs")
 
 const User = require('./../models/user')
 
@@ -13,7 +14,7 @@ app.post('/', (req, res) => {
     firstname: data.firstname,
     lastname: data.lastname,
     email: data.email,
-    password: data.password
+    password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(10))
   })
 
   // 3 - save lel objet
@@ -61,6 +62,10 @@ app.get('/:id', (req, res) => {
 app.patch('/:id', (req, res) => {
   let userId = req.params.id
   let data = req.body
+
+  if (data.hasOwnProperty('password')) {
+    data.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(10))
+  }
 
   User
     .findOneAndUpdate({ _id: userId }, data)
