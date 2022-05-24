@@ -5,7 +5,7 @@ const messagesSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    tittel: {
+    title: {
         type: String,
         required: true
     },
@@ -17,6 +17,6 @@ const messagesSchema = new mongoose.Schema({
 
 })
 
-const message = mongoose.model("message", messagesSchema)
+const Message = mongoose.model("message", messagesSchema)
 
-module.exports = message
+module.exports = Message
