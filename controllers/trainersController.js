@@ -27,9 +27,21 @@ app.get('/', async(req, res) => {
         else{ res.status(200).send({message: "no trainer found"}) } }
      catch (error) { res.status(400).send({message: "Error fetching trainers !", error: error}) } })
 
+
 //show a trainer api
-app.get('/:id', (req, res) => {
-    res.status(200).send({ message: "get trainer by id works !" })
+app.get('/:id', async (req, res) => {
+    try {
+        let trainerId = req.params.id
+        let trainer = await Trainer.findOne({__i : trainerId})
+        if(trainer){
+            res.status(200).send(trainer)
+        } else {
+            res.status(404).send({message: "trainer not found !"})
+        }
+        
+    } catch (error) {
+            res.status(400).send({message:"Error fetching trainers !", error: error})
+    }   
 })
 
 //modify a spesific trainer api
