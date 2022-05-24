@@ -1,6 +1,9 @@
 // import libs
 const express = require("express")
 
+// import database connection
+const mongoose = require("./config/db")
+
 // import controllers
 const trainersController = require("./controllers/trainersController")
 const trainingsController = require("./controllers/trainingsController")
