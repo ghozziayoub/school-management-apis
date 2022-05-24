@@ -5,7 +5,7 @@ const trainingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    Objectif: {
+    objectif: {
         type: String,
         required: true
     },
