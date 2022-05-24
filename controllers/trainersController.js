@@ -20,7 +20,7 @@ app.post('/', async (req, res) => {
         res.status(400).send({message:"trainer not saved !", error: error})
     }
 })
-//show all trainers api 
+//show all trainers api. 
 app.get('/', async(req, res) => {
      try { let trainers = await Trainer.find() 
         if(trainers.length != 0){ res.status(200).send(trainers) }
