@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const userSchema = new mongoose.Schema({
+const trainerSchema = new mongoose.Schema({
     firstname: {
         type: String,
         required: true
@@ -14,12 +14,16 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    password: {
+    speciality: {
         type: String,
         required: true
     },
+    yearsOfExperience: {
+        type: Number,
+        required: true
+    }
+
 })
 
-const User = mongoose.model("user", userSchema)
-
-module.exports = User
+const Trainer = mongoose.model("trainer", trainerSchema)
+module.exports = Trainer
