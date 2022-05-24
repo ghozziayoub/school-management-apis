@@ -30,19 +30,65 @@ app.post('/', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-  res.status(200).send({ message: "display all users!" })
+  User
+    .find()
+    .then((users) => {
+      res.status(200).send(users)
+    })
+    .catch((error) => {
+      res.status(400).send({ message: "Error fetching users !", error: error })
+    })
 })
 
 app.get('/:id', (req, res) => {
-  res.status(200).send({ message: "display user par Id!" })
+
+  let userId = req.params.id
+
+  User
+    .findOne({ _id: userId })
+    .then((user) => {
+      if (user)
+        res.status(200).send(user)
+      else
+        res.status(404).send({ message: "User not found !" })
+    })
+    .catch((error) => {
+      res.status(400).send({ message: "Error fetching users !", error: error })
+    })
+
 })
 
 app.patch('/:id', (req, res) => {
-  res.status(200).send({ message: "update user!" })
+  let userId = req.params.id
+  let data = req.body
+
+  User
+    .findOneAndUpdate({ _id: userId }, data)
+    .then((user) => {
+      if (user)
+        res.status(200).send({ message: "User updated !" })
+      else
+        res.status(404).send({ message: "User not found !" })
+    })
+    .catch((error) => {
+      res.status(400).send({ message: "Error fetching users !", error: error })
+    })
 })
 
 app.delete('/:id', (req, res) => {
-  res.status(200).send({ message: "delete user!" })
+  let userId = req.params.id
+
+  User
+    .findOneAndDelete({ _id: userId })
+    .then((user) => {
+      if (user)
+        res.status(200).send({ message: "User deleted !" })
+      else
+        res.status(404).send({ message: "User not found !" })
+    })
+    .catch((error) => {
+      res.status(400).send({ message: "Error fetching users !", error: error })
+    })
 })
 
 module.exports = app
