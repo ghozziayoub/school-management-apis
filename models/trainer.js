@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const TrainerSchema = new mongoose.Schema({
+const trainerSchema = new mongoose.Schema({
     firstname: {
         type: String,
         required: true
@@ -11,7 +11,8 @@ const TrainerSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     speciality: {
         type: String,
@@ -24,5 +25,5 @@ const TrainerSchema = new mongoose.Schema({
 
 })
 
-const Trainer = mongoose.model("trainer", TrainerSchema)
+const Trainer = mongoose.model("trainer", trainerSchema)
 module.exports = Trainer

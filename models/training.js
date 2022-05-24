@@ -1,11 +1,11 @@
 const mongoose = require("mongoose")
 
-const TrainingSchema = new mongoose.Schema({
+const trainingSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
     },
-    Objectif: {
+    objectif: {
         type: String,
         required: true
     },
@@ -23,6 +23,6 @@ const TrainingSchema = new mongoose.Schema({
     }
 })
 
-const Training = mongoose.model("training", TrainingSchema)
+const Training = mongoose.model("training", trainingSchema)
 
 module.exports = Training
