@@ -45,8 +45,20 @@ app.get('/:id', async (req, res) => {
 })
 
 //modify a spesific trainer api
-app.patch('/:id', (req, res) => {
-    res.status(200).send({ message: "update trainer works !" })
+app.patch('/:id', async (req, res) => {
+    try {
+        let trainerId = req.params.id
+        let data = req.body
+        let trainer = await Trainer.findOneAndUpdate({_i : trainerId}, data)
+        if(trainer){
+            res.status(200).send({message : "trainer updated"})
+        } else {
+            res.status(404).send({message: "trainer not found !"})
+        }
+    } catch (error) {
+        res.status(400).send({message:"Error fetching trainers !", error: error})
+        
+    }
 })
 
 //delete a spesific trainer api
