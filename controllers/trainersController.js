@@ -20,11 +20,12 @@ app.post('/', async (req, res) => {
         res.status(400).send({message:"trainer not saved !", error: error})
     }
 })
-
-//show all trainers api
-app.get('/', (req, res) => {
-    res.status(200).send({ message: "get all trainers works !" })
-})
+//show all trainers api 
+app.get('/', async(req, res) => {
+     try { let trainers = await Trainer.find() 
+        if(trainers.length != 0){ res.status(200).send(trainers) }
+        else{ res.status(200).send({message: "no trainer found"}) } }
+     catch (error) { res.status(400).send({message: "Error fetching trainers !", error: error}) } })
 
 //show a trainer api
 app.get('/:id', (req, res) => {
