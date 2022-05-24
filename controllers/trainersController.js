@@ -32,7 +32,7 @@ app.get('/', async(req, res) => {
 app.get('/:id', async (req, res) => {
     try {
         let trainerId = req.params.id
-        let trainer = await Trainer.findOne({__i : trainerId})
+        let trainer = await Trainer.findOne({_id : trainerId})
         if(trainer){
             res.status(200).send(trainer)
         } else {
@@ -50,8 +50,19 @@ app.patch('/:id', (req, res) => {
 })
 
 //delete a spesific trainer api
-app.delete('/:id', (req, res) => {
-    res.status(200).send({ message: "delete trainerworks !" })
+app.delete('/:id', async (req, res) => {
+    try {
+        let trainerId= req.params.id
+        let trainer = await Trainer.findOneAndDelete({_id : trainerId})
+        if(trainer){
+            res.status(200).send({message : "trainer deleted"})
+        } else {
+            res.status(404).send({message: "trainer not found !"})
+        }
+    } catch (error) {
+        res.status(400).send({message:"Error fetching trainers !", error: error})
+        
+    }
 })
 
 module.exports = app
