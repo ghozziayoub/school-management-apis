@@ -64,3 +64,25 @@ modifier : PATCH "/:id",
 supprimer : DELETE "/:id"
 
 mongoose : ODM => object document mapping
+
+API with then catch
+app.get('/', (req, res) => {
+  User
+    .find()
+    .then((users) => {
+      res.status(200).send(users)
+    })
+    .catch((error) => {
+      res.status(400).send({ message: "Error fetching users !", error: error })
+    })
+})
+
+API with async await
+app.get('/', async (req, res) => {
+  try {
+    let users = await User.find()
+    res.status(200).send(users)
+  } catch (error) {
+    res.status(400).send({ message: "Error fetching users !", error: error })
+  }
+})
