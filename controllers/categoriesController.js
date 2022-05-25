@@ -45,9 +45,22 @@ app.get('/:id', async (req, res) => {
 })
 
 
-app.patch('/:id', (req, res) => {
-    res.status(200).send({ message: "modifier catgories par id !" })
+app.patch('/:id', async (req, res) => {
+    try {
+        let categoryId = req.params.id
+        let data = req.body
+        let category = await Category.findOneAndDelete({ _id: categoryId }, data)
+
+        if (category)
+            res.status(200).send({ message: "Category updated !" })
+        else
+            res.status(404).send({ message: "Category not found !" })
+    } catch (error) {
+        res.status(400).send({ message: "Error fetching categories !", error: error })
+    }
 })
+
+
 
 app.delete('/:id', (req, res) => {
     res.status(200).send({ message: "supprimer catgories par id !" })
