@@ -21,18 +21,29 @@ app.post('/', async (req, res) => {
 
 
 app.get('/', async (req, res) => {
-   try{
-       let categories = await Category.find()
-       res.status(200).send(categories)
-   } catch (error){
-       res.status(400).send({message: "error fetching categories !", error: error})
-   }
+    try {
+        let categories = await Category.find()
+        res.status(200).send(categories)
+    } catch (error) {
+        res.status(400).send({ message: "error fetching categories !", error: error })
+    }
 })
 
 
-app.get('/:id', (req, res) => {
-    res.status(200).send({ message: "afficher catgories par id !" })
+app.get('/:id', async (req, res) => {
+    try {
+        let categoryId = req.params.id
+        let category = await Category.findOne({ _id: categoryId })
+
+        if (category)
+            res.status(200).send(category)
+        else
+            res.status(404).send({ message: "User not found !" })
+    } catch (error) {
+        res.status(400).send({ message: "Error fetching categories !", error: error })
+    }
 })
+
 
 app.patch('/:id', (req, res) => {
     res.status(200).send({ message: "modifier catgories par id !" })
