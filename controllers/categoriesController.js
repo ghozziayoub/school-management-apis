@@ -20,9 +20,15 @@ app.post('/', async (req, res) => {
 
 
 
-app.get('/', (req, res) => {
-    res.status(200).send({ message: "afficher tous catgories !" })
+app.get('/', async (req, res) => {
+   try{
+       let categories = await Category.find()
+       res.status(200).send(categories)
+   } catch (error){
+       res.status(400).send({message: "error fetching categories !", error: error})
+   }
 })
+
 
 app.get('/:id', (req, res) => {
     res.status(200).send({ message: "afficher catgories par id !" })
