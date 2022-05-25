@@ -1,10 +1,24 @@
 const express = require("express")
+const Category = require('./../models/category')
 
 const app = express()
 
-app.post('/', (req, res) => {
-    res.status(200).send({ message: "add category works !" })
+
+app.post('/', async (req, res) => {
+    try {
+        let data = req.body
+
+        let category = new Category({
+            name: data.name,
+        })
+        await category.save()
+        res.status(201).send({ message: "category saved !" })
+    } catch (error) {
+        res.status(400).send({ message: "category not saved !", error: error })
+    }
 })
+
+
 
 app.get('/', (req, res) => {
     res.status(200).send({ message: "afficher tous catgories !" })
