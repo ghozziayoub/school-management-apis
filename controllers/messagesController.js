@@ -1,7 +1,7 @@
 const express = require("express")
 const bcrypt = require("bcryptjs")
 
-const messages = require('./../models/messages')
+const message = require('./../models/messages')
 
 const app = express()
 
@@ -23,9 +23,22 @@ app.post('/', (req, res) => {
 })
 
 
-app.get('/', (req, res) => {
-    res.status(200).send({ message: "get all messages works !" })
+app.get('/', async(req, res) => {
+    try {
+        let messages = await Messages.find()
+        res.status(200).send(messages)
+    } catch (error) {
+        res.status(400).send({ message: "Error fetching messages !", error: error })
+    }
 })
+
+
+
+
+
+
+
+
 
 app.get('/:id', (req, res) => {
     res.status(200).send({ message: "get message by id works !" })
