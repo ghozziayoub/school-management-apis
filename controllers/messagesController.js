@@ -1,10 +1,27 @@
 const express = require("express")
+const bcrypt = require("bcryptjs")
+
+const messages = require('./../models/messages')
 
 const app = express()
 
 app.post('/', (req, res) => {
-    res.status(200).send({ message: "add message works !" })
+    try {
+        let data = req.body
+        let messages = new Messages({
+            sender: data.sender,
+            title: data.title,
+            content: data.content,
+        })
+        await messages.save()
+        res.status(200).send({ message: "add message works !" })
+
+    } catch (error) {
+        res.status(200).send({ message: "add message works !" })
+    }
+
 })
+
 
 app.get('/', (req, res) => {
     res.status(200).send({ message: "get all messages works !" })
