@@ -1,10 +1,12 @@
 const express = require("express")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 const User = require('./../models/user')
 
 const app = express()
 
+// register API
 app.post('/', async (req, res) => {
   try {
     // 1 - recupération des données mel front
@@ -28,6 +30,39 @@ app.post('/', async (req, res) => {
     res.status(400).send({ message: "user not saved !", error: error })
   }
 
+})
+
+app.post('/login', async (req, res) => {
+  try {
+
+    let data = req.body
+
+    let user = await User.findOne({ email: data.email })
+
+    if (user) {
+      let compare = bcrypt.compareSync(data.password, user.password)
+
+      if (compare) {
+        // 1 - creation mta3 token
+        // token => crypted string <= info
+        let dataToStoreInToken = {
+          id: user._id
+        }
+
+        let myToken = jwt.sign(dataToStoreInToken, "SECRET")
+
+        res.status(200).send({ token: myToken })
+
+      }
+      else
+        res.status(404).send({ message: "User not found !" })
+    }
+    else
+      res.status(404).send({ message: "User not found !" })
+
+  } catch (error) {
+    res.status(400).send({ message: "user cannot logged in !", error: error })
+  }
 })
 
 app.get('/', async (req, res) => {
