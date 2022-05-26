@@ -4,7 +4,7 @@ const Message = require('./../models/messages')
 
 const app = express()
 
-app.post('/', (req, res) => {
+app.post('/', async(req, res) => {
     try {
         let data = req.body
         let messages = new Message({
@@ -18,7 +18,6 @@ app.post('/', (req, res) => {
     } catch (error) {
         res.status(200).send({ message: "add message works !" })
     }
-
 })
 
 
