@@ -1,5 +1,6 @@
 const express = require("express");
 const Trainer = require("../models/trainer");
+const Training = require("../models/training");
 
 const app = express();
 
@@ -77,22 +78,12 @@ app.delete("/:id", async (req, res) => {
   try {
     let trainerId = req.params.id;
     let trainer = await Trainer.findOneAndDelete({ _id: trainerId });
-    if (trainer) {
+    let training = await Training.deleteMany({ idTrainer: trainerId });
+    if (trainer && training) {
       res.status(200).send({ message: "trainer deleted" });
     } else {
       res.status(404).send({ message: "trainer not found !" });
     }
-  } catch (error) {
-    res
-      .status(400)
-      .send({ message: "Error fetching trainers !", error: error });
-  }
-});
-
-app.delete("/", async (req, res) => {
-  try {
-    await Trainer.remove();
-    res.status(200).send({ message: "all trainer deleted" });
   } catch (error) {
     res
       .status(400)
