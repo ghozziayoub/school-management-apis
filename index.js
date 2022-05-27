@@ -1,24 +1,29 @@
-// import
+// import libs
 const express = require("express")
 
-// creation d'un objet express
-const app = express()
+// import database connection
+const mongoose = require("./config/db")
 
+// import controllers
+const trainersController = require("./controllers/trainersController")
+const trainingsController = require("./controllers/trainingsController")
+const messagesController = require("./controllers/messagesController")
+const categoriesController = require("./controllers/categoriesController")
+const usersController = require("./controllers/usersController")
+
+// creation d'un objet express .
+const app = express()
 const port = 3000
 
-// APIS => METHODE + /ROUTE-NAME ++ FUNCTION
-// p1 => object => Request
-// p2 => object => Response
-app.get("/a3tini-donnee", (req, res) => {
+// autorisé les données de type JSON
+app.use(express.json())
 
-    let users = [
-        { name: "ali", age: "50" },
-        { name: "mohamed", age: "30" },
-        { name: "salah", age: "60" },
-    ]
+// router
+app.use("/trainers", trainersController)
+app.use("/trainings", trainingsController)
+app.use("/messages", messagesController)
+app.use("/categories", categoriesController)
+app.use("/users", usersController)
 
-    res.status(200).send(users)
-
-})
-
+// create server
 app.listen(port, () => { console.log(`🟢 Server started on port ${port}`); })
