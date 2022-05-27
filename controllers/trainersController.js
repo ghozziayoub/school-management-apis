@@ -26,15 +26,9 @@ app.post("/", async (req, res) => {
 app.get("/", async (req, res) => {
   try {
     let trainers = await Trainer.find();
-    if (trainers.length != 0) {
-      res.status(200).send(trainers);
-    } else {
-      res.status(200).send({ message: "no trainer found" });
-    }
+    res.status(200).send(trainers);
   } catch (error) {
-    res
-      .status(400)
-      .send({ message: "Error fetching trainers !", error: error });
+    res.status(400).send({ message: "Error fetching trainers !", error: error });
   }
 });
 
@@ -49,9 +43,7 @@ app.get("/:id", async (req, res) => {
       res.status(404).send({ message: "trainer not found !" });
     }
   } catch (error) {
-    res
-      .status(400)
-      .send({ message: "Error fetching trainers !", error: error });
+    res.status(400).send({ message: "Error fetching trainer !", error: error });
   }
 });
 
@@ -60,7 +52,7 @@ app.patch("/:id", async (req, res) => {
   try {
     let trainerId = req.params.id;
     let data = req.body;
-    let trainer = await Trainer.findOneAndUpdate({ _i: trainerId }, data);
+    let trainer = await Trainer.findOneAndUpdate({ _id: trainerId }, data);
     if (trainer) {
       res.status(200).send({ message: "trainer updated" });
     } else {
@@ -69,7 +61,7 @@ app.patch("/:id", async (req, res) => {
   } catch (error) {
     res
       .status(400)
-      .send({ message: "Error fetching trainers !", error: error });
+      .send({ message: "Error updating trainer !", error: error });
   }
 });
 
@@ -87,7 +79,7 @@ app.delete("/:id", async (req, res) => {
   } catch (error) {
     res
       .status(400)
-      .send({ message: "Error fetching trainers !", error: error });
+      .send({ message: "Error deleting trainers !", error: error });
   }
 });
 

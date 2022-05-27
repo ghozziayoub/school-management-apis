@@ -13,7 +13,8 @@ app.post('/', async (req, res) => {
       objectif: data.objectif,
       program: data.program,
       hours: data.hours,
-      idTrainer: data.idTrainer
+      idTrainer: data.idTrainer,
+      idCategory: data.idCategory
     })
 
     await training.save()

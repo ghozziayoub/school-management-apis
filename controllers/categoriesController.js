@@ -1,6 +1,7 @@
 const express = require("express")
 
 const Category = require('./../models/category')
+const Training = require("../models/training");
 
 const app = express()
 
@@ -64,8 +65,9 @@ app.delete('/:id', async (req, res) => {
     try {
         let categoryId = req.params.id
         let category = await Category.findOneAndDelete({ _id: categoryId })
+        let training = await Training.deleteMany({ idCategory: categoryId });
 
-        if (category)
+        if (category && training)
             res.status(200).send({ message: "Category Deleted !" })
         else
             res.status(404).send({ message: "Category not found !" })
