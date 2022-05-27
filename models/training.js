@@ -17,8 +17,12 @@ const trainingSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    idTrainer :{
-        type :String,
+    idTrainer: {
+        type: String,
+        required: true,
+    },
+    idCategory: {
+        type: String,
         required: true,
     }
 })
