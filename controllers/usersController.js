@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken")
 
 const User = require('./../models/user')
 
+const { isAuthorized } = require("./../middlewares/auth")
+
 const app = express()
 
 // register API
@@ -50,8 +52,9 @@ app.post('/login', async (req, res) => {
         }
 
         let myToken = jwt.sign(dataToStoreInToken, "SECRET")
-
-        res.status(200).send({ token: myToken })
+        res.set("Access-Control-Expose-Headers", ["Authorization"])
+        res.set("Authorization", myToken)
+        res.status(200).send({ message: "User Logged in !" })
 
       }
       else
@@ -65,7 +68,7 @@ app.post('/login', async (req, res) => {
   }
 })
 
-app.get('/', async (req, res) => {
+app.get('/', [isAuthorized], async (req, res) => {
   try {
     let users = await User.find()
     res.status(200).send(users)
