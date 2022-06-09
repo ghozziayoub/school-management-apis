@@ -18,8 +18,18 @@ const port = 3000
 
 // autorisé les données de type JSON
 app.use(express.json())
+// autorisé les données de type files
+app.use(express.urlencoded({
+    extended: true
+}));
 // autorisé l'accee d'un serveur
 app.use(cors())
+
+// access to public files
+app.use(express.static('./assets/images'));
+app.use(express.static('./assets/images/users'));
+app.use(express.static('./assets/images/trainers'));
+app.use(express.static('./assets/images/trainings'));
 
 // router
 app.use("/trainers", trainersController)

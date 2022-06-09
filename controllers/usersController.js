@@ -1,23 +1,72 @@
 const express = require("express")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const multer = require('multer')
+
+const path = require('path');
 
 const User = require('./../models/user')
 
 const { isAuthorized } = require("./../middlewares/auth")
 
+// Set The Storage Engine
+const storage = multer.diskStorage(
+  {
+
+    destination: './assets/images/users',
+
+    filename: function (req, file, cb) {
+      let name = req.body.firstname.replace(' ', '').toLowerCase();
+
+      cb(null, name + '-' + Date.now() + path.extname(file.originalname));
+    }
+  }
+);
+
+// Check File Type
+function checkFileType(file, cb) {
+
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if (mimetype == true && extname == true) {
+    return cb(null, true);
+  } else {
+    cb('Error: Images Only!');
+  }
+}
+
+// Init Upload
+const upload = multer({
+
+  storage: storage,
+  limits: { fileSize: 1000000 },
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  }
+});
+
 const app = express()
 
 // register API
-app.post('/', async (req, res) => {
+app.post('/', [upload.single('pic')], async (req, res) => {
   try {
     // 1 - recupération des données mel front
     let data = req.body
+    // 1.1 recupération du fichier
+    let file = req.file
     // 2 - creation d'un objet User 
     // 2.1 - data => user
     let user = new User({
       firstname: data.firstname,
       lastname: data.lastname,
+      image: file.filename,
       email: data.email,
       password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(10))
     })
