@@ -9,9 +9,9 @@ const path = require('path');
 
 const app = express()
 
+
 const storage = multer.diskStorage(
     {
-  
       destination: './assets/images/categories',
   
       filename: function (req, file, cb) {
@@ -50,11 +50,12 @@ function checkFileType(file, cb) {
       checkFileType(file, cb);
     }
   });
+  
 app.post('/',   [upload.single('picture')] ,async (req, res) => {
     try {
         let data = req.body
         let file = req.file
-        
+
         let category = new Category({
             name: data.name,
             image: file.filename,

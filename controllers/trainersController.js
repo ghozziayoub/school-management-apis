@@ -2,10 +2,54 @@ const express = require("express");
 const Trainer = require("../models/trainer");
 const Training = require("../models/training");
 
+
+
+const multer = require('multer')
+
+const path = require('path');
+
+const storage = multer.diskStorage(
+  {
+
+    destination: './assets/images/trainers',
+
+    filename: function (req, file, cb) {
+      let name = req.body.firstname.replace(' ', '').toLowerCase();
+
+      cb(null, name + '-' + Date.now() + path.extname(file.originalname));
+    }
+  }
+);
+
+
+function checkFileType(file, cb) {
+
+  const filetypes = /jpeg|jpg|png|gif/;
+
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+  const mimetype = filetypes.test(file.mimetype);
+
+  if (mimetype == true && extname == true) {
+    return cb(null, true);
+  } else {
+    cb('Error: Images Only!');
+  }
+}
+
+const upload = multer({
+
+  storage: storage,
+  limits: { fileSize: 1000000 },
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  }
+});
+
 const app = express();
 
 //add trainer api
-app.post("/", async (req, res) => {
+app.post("/",[upload.single('picture')], async (req, res) => {
   try {
     let data = req.body;
     let trainer = new Trainer({
@@ -14,6 +58,7 @@ app.post("/", async (req, res) => {
       email: data.email,
       speciality: data.speciality,
       yearsOfExperience: data.yearsOfExperience,
+      image: file.filename,
     });
     await trainer.save();
     res.status(201).send({ message: "trainer added successfully" });
