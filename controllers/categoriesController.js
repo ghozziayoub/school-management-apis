@@ -3,14 +3,62 @@ const express = require("express")
 const Category = require('./../models/category')
 const Training = require("../models/training");
 
+const multer = require('multer')
+
+const path = require('path');
+
 const app = express()
 
-app.post('/', async (req, res) => {
+
+const storage = multer.diskStorage(
+    {
+      destination: './assets/images/categories',
+  
+      filename: function (req, file, cb) {
+        let name = req.body.firstname.replace(' ', '').toLowerCase();
+  
+        cb(null, name + '-' + Date.now() + path.extname(file.originalname));
+      }
+    }
+  );
+
+ 
+function checkFileType(file, cb) {
+
+  
+    const filetypes = /jpeg|jpg|png|gif/;
+  
+   
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  
+
+    const mimetype = filetypes.test(file.mimetype);
+  
+    if (mimetype == true && extname == true) {
+      return cb(null, true);
+    } else {
+      cb('Error: Images Only!');
+    }
+  }
+  
+
+  const upload = multer({
+  
+    storage: storage,
+    limits: { fileSize: 1000000 },
+    fileFilter: function (req, file, cb) {
+      checkFileType(file, cb);
+    }
+  });
+  
+app.post('/',   [upload.single('picture')] ,async (req, res) => {
     try {
         let data = req.body
+        let file = req.file
 
         let category = new Category({
             name: data.name,
+            image: file.filename,
         })
 
         await category.save()
