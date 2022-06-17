@@ -9,6 +9,7 @@ app.post('/', async (req, res) => {
         let data = req.body
         let messages = new Message({
             sender: data.sender,
+            email:data.email,
             title: data.title,
             content: data.content,
         })
