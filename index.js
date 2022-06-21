@@ -30,6 +30,7 @@ app.use(express.static('./assets/images'));
 app.use(express.static('./assets/images/users'));
 app.use(express.static('./assets/images/trainers'));
 app.use(express.static('./assets/images/trainings'));
+app.use(express.static('./assets/images/categories'));
 
 // router
 app.use("/trainers", trainersController)
