@@ -21,7 +21,11 @@ const trainerSchema = new mongoose.Schema({
     yearsOfExperience: {
         type: Number,
         required: true
-    }
+    },
+    image: {
+        type: String,
+        required: true
+    },
 
 })
 
