@@ -57,6 +57,9 @@ app.post("/",[upload.single('picture')], async (req, res) => {
       email: data.email,
       speciality: data.speciality,
       yearsOfExperience: data.yearsOfExperience,
+      facebook: data.facebook,
+      instagram: data.instagram,
+      twitter: data.twitter,
       image: file.filename
     });
     await trainer.save();
