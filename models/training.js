@@ -24,7 +24,12 @@ const trainingSchema = new mongoose.Schema({
     idCategory: {
         type: String,
         required: true,
+    },
+    image: {
+        type: String,
+        required: true,
     }
+  
 })
 
 const Training = mongoose.model("training", trainingSchema)
