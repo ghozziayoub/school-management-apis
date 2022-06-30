@@ -56,14 +56,23 @@ app.post("/", [upload.single("picture")], async (req, res) => {
 
     res.status(201).send({ message: "category saved !" });
   } catch (error) {
-    res.status(400).send({ message: "category not saved !", error: error });
+    res.status(400).send({ message: "category not saved !" });
   }
 });
 
 app.get("/", async (req, res) => {
   try {
     let categories = await Category.find();
-    res.status(200).send(categories);
+
+    let allCategories = [];
+
+    for (let i = 0; i < categories.length; i++) {
+      const category = categories[i];
+      const trainings = Training.find({ idCategory: category._id });
+      allCategories.push({ ...category._doc, trainings: (await trainings).length });
+    }
+
+    res.status(200).send(allCategories);
   } catch (error) {
     res
       .status(400)
