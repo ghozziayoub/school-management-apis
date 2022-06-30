@@ -51,7 +51,6 @@ app.post("/",[upload.single('picture')], async (req, res) => {
   try {
     let data = req.body;
     let file = req.file
-    console.log(file)
     let trainer = new Trainer({
       firstname: data.firstname,
       lastname: data.lastname,
