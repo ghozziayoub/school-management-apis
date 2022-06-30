@@ -55,12 +55,12 @@ const upload = multer({
 const app = express()
 
 // register API
-app.post('/', [upload.single('picture')], async (req, res) => {
+app.post('/',  async (req, res) => {
   try {
     // 1 - recupération des données mel front
     let data = req.body
     // 1.1 recupération du fichier
-    let file = req.file
+    console.log(data)
     // 2 - creation d'un objet User 
     // 2.1 - data => user
     let user = new User({

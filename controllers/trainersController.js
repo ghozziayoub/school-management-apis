@@ -1,9 +1,7 @@
 const express = require("express");
 const Trainer = require("../models/trainer");
 const Training = require("../models/training");
-
-
-
+const fs = require("fs");
 const multer = require('multer')
 
 const path = require('path');
@@ -52,6 +50,7 @@ const app = express();
 app.post("/",[upload.single('picture')], async (req, res) => {
   try {
     let data = req.body;
+    let file = req.file
     let trainer = new Trainer({
       firstname: data.firstname,
       lastname: data.lastname,
@@ -93,10 +92,15 @@ app.get("/:id", async (req, res) => {
 });
 
 //modify a spesific trainer api
-app.patch("/:id", async (req, res) => {
+app.patch("/:id", [upload.single('picture')], async (req, res) => {
   try {
     let trainerId = req.params.id;
     let data = req.body;
+    if (req.file) {
+      data.image = req.file.filename;
+      let trainerPic = await Trainer.findOne({ _id: trainerId });
+      fs.unlinkSync("assets/images/trainers/" + trainerPic.image);
+    }
     let trainer = await Trainer.findOneAndUpdate({ _id: trainerId }, data);
     if (trainer) {
       res.status(200).send({ message: "trainer updated" });
