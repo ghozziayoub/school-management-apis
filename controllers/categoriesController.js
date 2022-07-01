@@ -69,7 +69,10 @@ app.get("/", async (req, res) => {
     for (let i = 0; i < categories.length; i++) {
       const category = categories[i];
       const trainings = Training.find({ idCategory: category._id });
-      allCategories.push({ ...category._doc, trainings: (await trainings).length });
+      allCategories.push({
+        ...category._doc,
+        trainings: (await trainings).length,
+      });
     }
 
     res.status(200).send(allCategories);
@@ -124,8 +127,15 @@ app.patch("/:id", [upload.single("picture")], async (req, res) => {
 app.delete("/:id", async (req, res) => {
   try {
     let categoryId = req.params.id;
+    let categoryPic = await Category.findOne({ _id: categoryId });
+    fs.unlinkSync("assets/images/categories/" + categoryPic.image);
     let category = await Category.findOneAndDelete({ _id: categoryId });
+
+    let allTrainingPics = await Training.find({ idCategory: categoryId });
     let training = await Training.deleteMany({ idCategory: categoryId });
+    for (i = 0; i < allTrainingPics.length; i++) {
+      fs.unlinkSync("assets/images/trainings/" + allTrainingPics[i].image);
+    }
 
     if (category && training)
       res.status(200).send({ message: "Category Deleted !" });

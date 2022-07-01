@@ -36,7 +36,6 @@ function checkFileType(file, cb) {
 }
 
 const upload = multer({
-
   storage: storage,
   limits: { fileSize: 1000000 },
   fileFilter: function (req, file, cb) {
@@ -123,6 +122,8 @@ app.patch("/:id", [upload.single('picture')], async (req, res) => {
 app.delete("/:id", async (req, res) => {
   try {
     let trainerId = req.params.id;
+    let trainerPic = await Trainer.findOne({ _id: trainerId });
+    fs.unlinkSync("assets/images/trainers/" + trainerPic.image);
     let trainer = await Trainer.findOneAndDelete({ _id: trainerId });
     let training = await Training.deleteMany({ idTrainer: trainerId });
     if (trainer && training) {
