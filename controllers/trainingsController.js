@@ -101,7 +101,6 @@ app.get("/:id", async (req, res) => {
     let trainingId = req.params.id;
 
     let training = await Training.findOne({ _id: trainingId });
-
     let trainer = await Trainer.findOne({ _id: training.idTrainer });
     let category = await Category.findOne({ _id: training.idCategory });
 

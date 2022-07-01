@@ -51,6 +51,7 @@ app.post("/",[upload.single('picture')], async (req, res) => {
   try {
     let data = req.body;
     let file = req.file
+    
     let trainer = new Trainer({
       firstname: data.firstname,
       lastname: data.lastname,
@@ -62,6 +63,7 @@ app.post("/",[upload.single('picture')], async (req, res) => {
       twitter: data.twitter,
       image: file.filename
     });
+    console.log(trainer)
     await trainer.save();
     res.status(201).send({ message: "trainer added successfully" });
   } catch (error) {
