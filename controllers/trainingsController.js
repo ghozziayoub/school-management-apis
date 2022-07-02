@@ -1,5 +1,5 @@
 const express = require("express");
-
+const fs = require("fs");
 const Trainer = require("./../models/trainer");
 const Category = require("./../models/category");
 const Training = require("./../models/training");
@@ -45,7 +45,6 @@ app.post("/", [upload.single("picture")], async (req, res) => {
   try {
     let data = req.body;
     let file = req.file;
-
     let training = new Training({
       name: data.name,
       objectif: data.objectif,
@@ -55,11 +54,17 @@ app.post("/", [upload.single("picture")], async (req, res) => {
       idCategory: data.idCategory,
       image: file.filename,
     });
-
-    await training.save();
-
-    res.status(201).send({ message: "Training saved !" });
+    let trainer = await Trainer.findOne({ _id: data.idTrainer });
+    let category = await Category.findOne({ _id: data.idCategory });
+    if (trainer && category) {
+      await training.save();
+      res.status(201).send({ message: "Training saved !" });
+    } else {
+      fs.unlinkSync("assets/images/trainings/" + file.filename);
+      res.status(400).send({ message: "Training not saved !", error: error });
+    }
   } catch (error) {
+    fs.unlinkSync("assets/images/trainings/" + file.filename);
     res.status(400).send({ message: "Training not saved !", error: error });
   }
 });
@@ -101,7 +106,6 @@ app.get("/:id", async (req, res) => {
     let trainingId = req.params.id;
 
     let training = await Training.findOne({ _id: trainingId });
-
     let trainer = await Trainer.findOne({ _id: training.idTrainer });
     let category = await Category.findOne({ _id: training.idCategory });
 
@@ -125,15 +129,27 @@ app.get("/:id", async (req, res) => {
   }
 });
 
-app.patch("/:id", async (req, res) => {
+app.patch("/:id", [upload.single("picture")], async (req, res) => {
   try {
-    let trainingId = req.params.id;
-    let data = req.body;
-
-    let training = await Training.findOneAndUpdate({ _id: trainingId }, data);
-
-    if (training) res.status(200).send({ message: "Training updated !" });
-    else res.status(404).send({ message: "Training not found !" });
+    let trainingId = req.params.id;;
+    let data = req.body
+    if (req.file) {
+      data.image = req.file.filename;
+      let trainingPic = await Training.findOne({ _id: trainingId });
+        fs.unlinkSync("assets/images/trainings/" + trainingPic.image);
+    }
+    let trainer = await Trainer.findOne({ _id: data.idTrainer });
+    let category = await Category.findOne({ _id: data.idCategory });
+    if (trainer && category) {
+      let training = await Training.findOneAndUpdate({ _id: trainingId }, data);
+      if (training) 
+        res.status(200).send({ message: "Training updated !" });
+      else 
+        res.status(404).send({ message: "Training not found !" });
+    } else {
+      res.status(400).send({ message: "Training not saved !", error: error });
+    }
+ 
   } catch (error) {
     res
       .status(400)
@@ -144,7 +160,10 @@ app.patch("/:id", async (req, res) => {
 app.delete("/:id", async (req, res) => {
   try {
     let trainingId = req.params.id;
-
+    console.log(trainingId);
+    
+    let trainingPic = await Training.findOne({ _id: trainingId });
+    fs.unlinkSync("assets/images/trainings/" + trainingPic.image);
     let training = await Training.findOneAndDelete({ _id: trainingId });
 
     if (training) res.status(200).send({ message: "Training deleted !" });

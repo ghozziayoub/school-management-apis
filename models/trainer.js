@@ -26,7 +26,7 @@ const trainerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    intagram: {
+    instagram: {
         type: String,
         required: true
     },
