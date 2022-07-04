@@ -6,7 +6,6 @@ const fs = require("fs");
 //import models
 const Article = require("./../models/article");
 const User = require("../models/user");
-const { find } = require("./../models/article");
 
 const app = express();
 
@@ -59,5 +58,35 @@ app.post("/", [upload.single("picture")], async (req, res) => {
     res.status(400).send(error);
   }
 });
+
+
+app.get('/',async(req,res)=>{
+    try {
+        let articles = await Article.find();
+        let allarticles = [];
+    
+        for (let i = 0; i < articles.length; i++) {
+          const article = articles[i];
+          const user = await User.findOne({ idArticle: article._id });
+          allarticles.push({
+            ...article._doc,
+            user:{
+                _id:user._id,
+                firstname:user.firstname,
+                lastname:user.lastname,
+                image:user.image
+            },
+          });
+        }
+    
+        res.status(200).send(allarticles);
+      } catch (error) {
+        res
+          .status(400)
+          .send({ message: "error fetching articles !", error: error });
+      }
+})
+
+
 
 module.exports = app;
