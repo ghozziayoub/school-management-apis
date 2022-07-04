@@ -59,7 +59,7 @@ app.post("/", [upload.single("picture")], async (req, res) => {
   }
 });
 
-
+//show all articles
 app.get('/',async(req,res)=>{
     try {
         let articles = await Article.find();
@@ -85,7 +85,38 @@ app.get('/',async(req,res)=>{
           .status(400)
           .send({ message: "error fetching articles !", error: error });
       }
-})
+});
+
+//get article by id
+app.get("/:id", async (req, res) => {
+    try {
+      let articleId = req.params.id;
+      let article = await Article.findOne({ _id: articleId });
+      const user = await User.findOne({ idArticle: article._id });
+      let articleByUser = {
+            ...article._doc,
+            user:{
+                _id:user._id,
+                firstname:user.firstname,
+                lastname:user.lastname,
+                image:user.image
+            },
+          };
+
+      if (articleByUser) res.status(200).send(articleByUser);
+      else res.status(404).send({ message: "Article not found !" });
+    } catch (error) {
+      res
+        .status(400)
+        .send({ message: "Error fetching article !", error: error });
+    }
+  });
+
+
+
+
+
+
 
 
 
