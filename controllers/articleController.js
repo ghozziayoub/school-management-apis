@@ -117,7 +117,18 @@ app.get("/:id", async (req, res) => {
 
 
 
-
+  app.delete("/:id", async (req, res) => {
+    try {
+      let articleId = req.params.id;
+      let articlePic = await Article.findOne({ _id: articleId });
+      fs.unlinkSync("assets/images/articles/" + articlePic.image);
+      let article = await Article.findOneAndDelete({ _id: articleId });
+    } catch (error) {
+      res
+        .status(400)
+        .send({ message: "Error deleting articles !", error: error });
+    }
+  });
 
 
 module.exports = app;
