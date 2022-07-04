@@ -112,11 +112,35 @@ app.get("/:id", async (req, res) => {
     }
   });
 
+  app.patch("/:id", [upload.single("picture")], async (req, res) => {
+    try {
+      let articleId = req.params.id;
+      let data = req.body;
+  
+      if (req.file) {
+        data.image = req.file.filename;
+        let article = await Article.findOne({ _id: articleId });
+        fs.unlinkSync("assets/images/articles/" + article.image);
+      }
+  
+      let updatedArticle = await Article.findOneAndUpdate(
+        { _id: articleId },
+        data
+      );
+  
+      if (updatedArticle)
+        res.status(200).send({ message: "Article updated !" });
+      else res.status(404).send({ message: "Article not found !" });
+    } catch (error) {
+      res
+        .status(400)
+        .send({ message: "Error updating article !", error: error });
+    }
+  });
 
 
 
-
-
+// delete article api
   app.delete("/:id", async (req, res) => {
     try {
       let articleId = req.params.id;
