@@ -140,6 +140,7 @@ app.delete("/:id", async (req, res) => {
     let articlePic = await Article.findOne({ _id: articleId });
     fs.unlinkSync("assets/images/articles/" + articlePic.image);
     let article = await Article.findOneAndDelete({ _id: articleId });
+    res.status(200).send({ message: "Article updated !" });
   } catch (error) {
     res
       .status(400)
