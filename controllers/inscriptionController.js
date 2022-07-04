@@ -19,6 +19,10 @@ app.post("/", async (req, res) => {
       });
       await inscription.save();
       res.status(200).send({ messages: "inscription done !" });
+    } else {
+      res
+        .status(400)
+        .send({ message: "error fetching inscription !", error: error });
     }
   } catch (error) {
     res
@@ -84,9 +88,7 @@ app.delete("/:id", async (req, res) => {
     if (inscription) {
       res.status(200).send("inscription deleted succfully");
     } else {
-      res
-        .status(400)
-        .send({ message: "Error inscription not deleted !" });
+      res.status(400).send({ message: "Error inscription not deleted !" });
     }
   } catch (error) {
     res
