@@ -57,7 +57,7 @@ app.get("/", async (req,res)=>{
 
 app.get("/:id", async (req,res)=>{
   try {
-      inscriptionId = req.params.id
+      let inscriptionId = req.params.id
       let inscription = await Inscription.findOne({_id:inscriptionId})
       let training = await Training.findOne({_id : inscription.trainingId})
       let inscriptionToTraining = {
@@ -77,6 +77,21 @@ app.get("/:id", async (req,res)=>{
   }
   }
 )
+
+
+
+app.delete("/:id",async(req,res)=>{
+  try {
+    let inscriptionId = req.params.id
+    let inscription = await Inscription.findOneAndDelete({_id:inscriptionId})
+    res.status(200).send("inscription deleted succfully")
+  } catch (error) {
+    res
+    .status(400)
+    .send({ message: "Error fetching inscription !", error: error });
+  }
+ 
+})
 
 
 module.exports = app;
