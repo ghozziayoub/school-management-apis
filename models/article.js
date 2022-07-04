@@ -28,7 +28,7 @@ const ArticleSchema = mongoose.Schema({
     }
     
 
-});
+},{timestamps:true});
 
 const Article = mongoose.model("article", ArticleSchema);
 
