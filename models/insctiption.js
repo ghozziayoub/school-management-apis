@@ -8,7 +8,7 @@ const InscriptionSchema = mongoose.Schema(
       min: 3,
       max: 160,
     },
-    lastename: {
+    lastname: {
       type: String,
       required: true,
       min: 3,
