@@ -11,6 +11,7 @@ const trainingsController = require("./controllers/trainingsController")
 const messagesController = require("./controllers/messagesController")
 const categoriesController = require("./controllers/categoriesController")
 const usersController = require("./controllers/usersController")
+const articleController = require("./controllers/articleController")
 
 // creation d'un objet express .
 const app = express()
@@ -31,12 +32,14 @@ app.use(express.static('./assets/images/users'));
 app.use(express.static('./assets/images/trainers'));
 app.use(express.static('./assets/images/trainings'));
 app.use(express.static('./assets/images/categories'));
+app.use(express.static('./assets/images/articles'));
 
 // router
 app.use("/trainers", trainersController)
 app.use("/trainings", trainingsController)
 app.use("/messages", messagesController)
 app.use("/categories", categoriesController)
+app.use("/article", articleController)
 app.use("/users", usersController)
 
 // create server
