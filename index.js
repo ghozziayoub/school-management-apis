@@ -12,6 +12,7 @@ const messagesController = require("./controllers/messagesController")
 const categoriesController = require("./controllers/categoriesController")
 const usersController = require("./controllers/usersController")
 const articleController = require("./controllers/articleController")
+const inscriptionController = require("./controllers/inscriptionController")
 
 // creation d'un objet express .
 const app = express()
@@ -40,6 +41,7 @@ app.use("/trainings", trainingsController)
 app.use("/messages", messagesController)
 app.use("/categories", categoriesController)
 app.use("/article", articleController)
+app.use("/inscription", inscriptionController)
 app.use("/users", usersController)
 
 // create server
