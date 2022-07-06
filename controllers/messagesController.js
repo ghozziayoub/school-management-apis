@@ -52,9 +52,9 @@ app.patch('/:id', async (req, res) => {
         let messagesId = req.params.id
         let data = req.body
 
-        let messages = await Message.findOneAndUpdate({ _id: messagesId }, data)
+        let message = await Message.findOneAndUpdate({ _id: messagesId }, data)
 
-        if (messages)
+        if (message)
             res.status(200).send({ message: "Messages updated !" })
         else
             res.status(404).send({ message: "Messages not found !" })
@@ -69,9 +69,9 @@ app.delete('/:id', async (req, res) => {
     try {
         let messagesId = req.params.id
 
-        let messages = await Messages.findOneAndDelete({ _id: messagesId })
+        let message = await Message.findOneAndDelete({ _id: messagesId })
 
-        if (messages)
+        if (message)
             res.status(200).send({ message: "messages deleted !" })
         else
             res.status(404).send({ message: "Messages not found !" })
