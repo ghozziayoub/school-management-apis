@@ -50,10 +50,9 @@ app.post("/", [upload.single("picture")], async (req, res) => {
       titre: data.titre,
       content: data.content,
       image: file.filename,
-      createdBy: data.userId,
     });
     await article.save();
-    res.status(200).send("article added !");
+    res.status(200).send({ message: "article added !" });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -63,23 +62,7 @@ app.post("/", [upload.single("picture")], async (req, res) => {
 app.get("/", async (req, res) => {
   try {
     let articles = await Article.find();
-    let allarticles = [];
-
-    for (let i = 0; i < articles.length; i++) {
-      const article = articles[i];
-      const user = await User.findOne({ idArticle: article._id });
-      allarticles.push({
-        ...article._doc,
-        user: {
-          _id: user._id,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          image: user.image,
-        },
-      });
-    }
-
-    res.status(200).send(allarticles);
+    res.status(200).send(articles);
   } catch (error) {
     res
       .status(400)
@@ -92,18 +75,8 @@ app.get("/:id", async (req, res) => {
   try {
     let articleId = req.params.id;
     let article = await Article.findOne({ _id: articleId });
-    const user = await User.findOne({ idArticle: article._id });
-    let articleByUser = {
-      ...article._doc,
-      user: {
-        _id: user._id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        image: user.image,
-      },
-    };
 
-    if (articleByUser) res.status(200).send(articleByUser);
+    if (article) res.status(200).send(article);
     else res.status(404).send({ message: "Article not found !" });
   } catch (error) {
     res.status(400).send({ message: "Error fetching article !", error: error });
