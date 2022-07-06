@@ -69,7 +69,7 @@ app.delete('/:id', async (req, res) => {
     try {
         let messagesId = req.params.id
 
-        let messages = await messages.findOneAndDelete({ _id: messagesId })
+        let messages = await Messages.findOneAndDelete({ _id: messagesId })
 
         if (messages)
             res.status(200).send({ message: "messages deleted !" })
