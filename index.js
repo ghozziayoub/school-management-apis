@@ -1,31 +1,32 @@
 // import libs
-const express = require("express")
-const cors = require("cors")
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 
 // import database connection
-const mongoose = require("./config/db")
+const mongoose = require("./config/db");
 
 // import controllers
-const trainersController = require("./controllers/trainersController")
-const trainingsController = require("./controllers/trainingsController")
-const messagesController = require("./controllers/messagesController")
-const categoriesController = require("./controllers/categoriesController")
-const usersController = require("./controllers/usersController")
-const articleController = require("./controllers/articleController")
-const inscriptionController = require("./controllers/inscriptionController")
+const trainersController = require("./controllers/trainersController");
+const trainingsController = require("./controllers/trainingsController");
+const messagesController = require("./controllers/messagesController");
+const categoriesController = require("./controllers/categoriesController");
+const usersController = require("./controllers/usersController");
+const articleController = require("./controllers/articleController");
+const inscriptionController = require("./controllers/inscriptionController");
 
 // creation d'un objet express .
-const app = express()
-const port = 3010
+const app = express();
+const port = process.env.PORT || 3010;
 
 // autorisé les données de type JSON
-app.use(express.json())
+app.use(express.json());
 // autorisé les données de type files
 app.use(express.urlencoded({
     extended: true
 }));
 // autorisé l'accee d'un serveur
-app.use(cors())
+app.use(cors());
 
 // access to public files
 app.use(express.static('./assets/images'));
@@ -36,13 +37,13 @@ app.use(express.static('./assets/images/categories'));
 app.use(express.static('./assets/images/articles'));
 
 // router
-app.use("/trainers", trainersController)
-app.use("/trainings", trainingsController)
-app.use("/messages", messagesController)
-app.use("/categories", categoriesController)
-app.use("/article", articleController)
-app.use("/inscription", inscriptionController)
-app.use("/users", usersController)
+app.use("/trainers", trainersController);
+app.use("/trainings", trainingsController);
+app.use("/messages", messagesController);
+app.use("/categories", categoriesController);
+app.use("/article", articleController);
+app.use("/inscription", inscriptionController);
+app.use("/users", usersController);
 
 // create server
-app.listen(port, () => { console.log(`🟢 Server started on port ${port}`); })
+app.listen(port, () => { console.log(`🟢 Server started on port ${port}`); });
