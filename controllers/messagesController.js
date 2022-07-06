@@ -69,12 +69,10 @@ app.delete('/:id', async (req, res) => {
     try {
         let messagesId = req.params.id
 
-        let messages = await messages.findOneAndDelete({ _id: messagesId })
+        let messages = await Message.findOneAndDelete({ _id: messagesId })
 
-        if (messages)
+       
             res.status(200).send({ message: "messages deleted !" })
-        else
-            res.status(404).send({ message: "Messages not found !" })
 
     } catch (error) {
         res.status(400).send({ message: "Error deleting messages !", error: error })
