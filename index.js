@@ -16,7 +16,7 @@ const inscriptionController = require("./controllers/inscriptionController")
 
 // creation d'un objet express .
 const app = express()
-const port = 3000
+const port = 3010
 
 // autorisé les données de type JSON
 app.use(express.json())
