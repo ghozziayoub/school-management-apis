@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 
 mongoose
     .connect(
-        String(process.env.NODE_ENV).includes("development") ?
-            process.env.MONGO_URL_DEV :
-            process.env.MONGO_URL_PROD
+        String(process.env.NODE_ENV).includes("development")
+            ? process.env.MONGO_URL_DEV
+            : process.env.MONGO_URL_PROD ||
+            "mongodb://admin:azerty1234%40@102.219.178.96:27017/school-management?authMechanism=SCRAM-SHA-1&authSource=admin"
     )
     .then(() => {
         console.log("🟢 Connection to database success ! ");
