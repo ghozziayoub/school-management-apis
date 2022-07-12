@@ -36,6 +36,10 @@ const trainingSchema = new mongoose.Schema({
     starting_date:{
         type:Date,
         required:true
+    },
+    seat:{
+        type: Number,
+        required: true
     }
   
 })
