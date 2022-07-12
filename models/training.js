@@ -32,6 +32,10 @@ const trainingSchema = new mongoose.Schema({
     price:{
         type:Number,
         required:true
+    },
+    starting_date:{
+        type:Date,
+        required:true
     }
   
 })
