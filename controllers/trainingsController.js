@@ -50,6 +50,8 @@ app.post("/", [upload.single("picture")], async (req, res) => {
       objectif: data.objectif,
       program: data.program,
       hours: data.hours,
+      starting_date: data.starting_date,
+      price: data.price,
       idTrainer: data.idTrainer,
       idCategory: data.idCategory,
       image: file.filename,
@@ -86,6 +88,8 @@ app.get("/", async (req, res) => {
         program: element.program,
         hours: element.hours,
         image: element.image,
+        starting_date: element.starting_date,
+        price: element.price,
         trainer,
         category,
       };
@@ -116,6 +120,8 @@ app.get("/:id", async (req, res) => {
       program: training.program,
       hours: training.hours,
       image: training.image,
+      price:training.price,
+      starting_date: training.starting_date,
       trainer,
       category,
     };
