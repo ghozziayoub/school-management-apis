@@ -52,6 +52,7 @@ app.post("/", [upload.single("picture")], async (req, res) => {
       hours: data.hours,
       starting_date: data.starting_date,
       price: data.price,
+      seat: data.seat,
       idTrainer: data.idTrainer,
       idCategory: data.idCategory,
       image: file.filename,
@@ -66,7 +67,7 @@ app.post("/", [upload.single("picture")], async (req, res) => {
       res.status(400).send({ message: "Training not saved !", error: error });
     }
   } catch (error) {
-    fs.unlinkSync("assets/images/trainings/" + file.filename);
+    console.log(error)
     res.status(400).send({ message: "Training not saved !", error: error });
   }
 });
@@ -90,6 +91,7 @@ app.get("/", async (req, res) => {
         image: element.image,
         starting_date: element.starting_date,
         price: element.price,
+        seat: element.seat,
         trainer,
         category,
       };
@@ -121,6 +123,7 @@ app.get("/:id", async (req, res) => {
       hours: training.hours,
       image: training.image,
       price: training.price,
+      seat: training.seat,
       starting_date: training.starting_date,
       trainer,
       category,
