@@ -1,55 +1,15 @@
 const express = require("express");
-
 const Category = require("./../models/category");
 const Training = require("../models/training");
-
-const multer = require("multer");
-
-const path = require("path");
-const fs = require("fs");
-
 const app = express();
 
-const storage = multer.diskStorage({
-  destination: "./assets/images/categories",
-
-  filename: function (req, file, cb) {
-    let name = req.body.name.replace(" ", "").toLowerCase();
-
-    cb(null, name + "-" + Date.now() + path.extname(file.originalname));
-  },
-});
-
-function checkFileType(file, cb) {
-  const filetypes = /jpeg|jpg|png|gif/;
-
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-
-  const mimetype = filetypes.test(file.mimetype);
-
-  if (mimetype == true && extname == true) {
-    return cb(null, true);
-  } else {
-    cb("Error: Images Only!");
-  }
-}
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1000000 },
-  fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
-  },
-});
-
-app.post("/", [upload.single("picture")], async (req, res) => {
+app.post("/", async (req, res) => {
   try {
     let data = req.body;
-    let file = req.file;
+
 
     let category = new Category({
       name: data.name,
-      image: file.filename,
     });
 
     await category.save();
@@ -98,7 +58,7 @@ app.get("/:id", async (req, res) => {
   }
 });
 
-app.patch("/:id", [upload.single("picture")], async (req, res) => {
+app.patch("/:id", async (req, res) => {
   try {
     let categoryId = req.params.id;
     let data = req.body;
@@ -106,7 +66,6 @@ app.patch("/:id", [upload.single("picture")], async (req, res) => {
     if (req.file) {
       data.image = req.file.filename;
       let category = await Category.findOne({ _id: categoryId });
-      fs.unlinkSync("assets/images/categories/" + category.image);
     }
 
     let updatedCategory = await Category.findOneAndUpdate(
@@ -127,15 +86,8 @@ app.patch("/:id", [upload.single("picture")], async (req, res) => {
 app.delete("/:id", async (req, res) => {
   try {
     let categoryId = req.params.id;
-    let categoryPic = await Category.findOne({ _id: categoryId });
-    fs.unlinkSync("assets/images/categories/" + categoryPic.image);
     let category = await Category.findOneAndDelete({ _id: categoryId });
-
-    let allTrainingPics = await Training.find({ idCategory: categoryId });
     let training = await Training.deleteMany({ idCategory: categoryId });
-    for (i = 0; i < allTrainingPics.length; i++) {
-      fs.unlinkSync("assets/images/trainings/" + allTrainingPics[i].image);
-    }
 
     if (category && training)
       res.status(200).send({ message: "Category Deleted !" });
