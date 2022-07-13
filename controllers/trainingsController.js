@@ -67,7 +67,7 @@ app.post("/", [upload.single("picture")], async (req, res) => {
       res.status(400).send({ message: "Training not saved !", error: error });
     }
   } catch (error) {
-    fs.unlinkSync("assets/images/trainings/" + file.filename);
+    console.log(error)
     res.status(400).send({ message: "Training not saved !", error: error });
   }
 });
