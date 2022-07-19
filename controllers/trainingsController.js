@@ -107,6 +107,45 @@ app.get("/", async (req, res) => {
   }
 });
 
+
+app.get("/related/:category", async (req, res) => {
+  try {
+    let relatedCategory = req.params.category
+    console.log(relatedCategory)
+    let trainings = await Training.find({idCategory: relatedCategory});
+    console.log(trainings)
+    let allTrainings = [];
+
+    for (let i = 0; i < trainings.length; i++) {
+      const element = trainings[i];
+
+      let trainer = await Trainer.findOne({ _id: element.idTrainer });
+      let category = await Category.findOne({ _id: element.idCategory });
+      let training = {
+        _id: element._id,
+        name: element.name,
+        objectif: element.objectif,
+        program: element.program,
+        hours: element.hours,
+        image: element.image,
+        starting_date: element.starting_date,
+        price: element.price,
+        seat: element.seat,
+        trainer,
+        category,
+      };
+
+      allTrainings.push(training);
+    }
+
+    res.status(200).send(allTrainings);
+  } catch (error) {
+    res
+      .status(400)
+      .send({ message: "Error fetching trainings !", error: error });
+  }
+});
+
 app.get("/:id", async (req, res) => {
   try {
     let trainingId = req.params.id;
