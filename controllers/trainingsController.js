@@ -7,6 +7,7 @@ const Training = require("./../models/training");
 const multer = require("multer");
 
 const path = require("path");
+const Inscription = require("../models/insctiption");
 
 const storage = multer.diskStorage({
   destination: "./assets/images/trainings",
@@ -82,6 +83,7 @@ app.get("/", async (req, res) => {
 
       let trainer = await Trainer.findOne({ _id: element.idTrainer });
       let category = await Category.findOne({ _id: element.idCategory });
+      let inscriptions = await Inscription.find({trainingId: element._id})
       let training = {
         _id: element._id,
         name: element.name,
@@ -94,6 +96,7 @@ app.get("/", async (req, res) => {
         seat: element.seat,
         trainer,
         category,
+        inscriptions
       };
 
       allTrainings.push(training);

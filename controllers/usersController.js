@@ -110,15 +110,15 @@ app.post('/login', async(req, res) => {
                 let myToken = jwt.sign(dataToStoreInToken, "SECRET")
                 res.set("Access-Control-Expose-Headers", ["Authorization"])
                 res.set("Authorization", myToken)
-                res.status(200).send({ message: "User Logged in !", userDetails })
+                res.status(200).send({ message: "vous avez connecté", userDetails })
 
             } else
-                res.status(404).send({ message: "User not found !" })
+                res.status(404).send({ message: "informations incorrectes" })
         } else
-            res.status(404).send({ message: "User not found !" })
+            res.status(404).send({ message: "informations incorrectes!" })
 
     } catch (error) {
-        res.status(400).send({ message: "user cannot logged in !", error: error })
+        res.status(400).send({ message: "l'utilisateur ne peut pas se connecter", error: error })
     }
 })
 
