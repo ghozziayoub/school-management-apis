@@ -65,6 +65,7 @@ app.post('/', [upload.single("picture")], async(req, res) => {
         let user = new User({
             firstname: data.firstname,
             lastname: data.lastname,
+            telephone: data.telephone,
             image: file.filename,
             email: data.email,
             password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(10))
@@ -88,6 +89,12 @@ app.post('/login', async(req, res) => {
         let data = req.body
 
         let user = await User.findOne({ email: data.email })
+        let userDetails = {
+            id:user._id,
+            fullname:user.firstname + " "+ user.lastname,
+            email:user.email,
+            telephone:user.telephone 
+        }
 
         if (user) {
             let compare = bcrypt.compareSync(data.password, user.password)
@@ -96,21 +103,22 @@ app.post('/login', async(req, res) => {
                 // 1 - creation mta3 token
                 // token => crypted string <= info
                 let dataToStoreInToken = {
-                    id: user._id
+                    id: user._id,
+                    role: user.role
                 }
 
                 let myToken = jwt.sign(dataToStoreInToken, "SECRET")
                 res.set("Access-Control-Expose-Headers", ["Authorization"])
                 res.set("Authorization", myToken)
-                res.status(200).send({ message: "User Logged in !" })
+                res.status(200).send({ message: "vous avez connecté", userDetails })
 
             } else
-                res.status(404).send({ message: "User not found !" })
+                res.status(404).send({ message: "informations incorrectes" })
         } else
-            res.status(404).send({ message: "User not found !" })
+            res.status(404).send({ message: "informations incorrectes!" })
 
     } catch (error) {
-        res.status(400).send({ message: "user cannot logged in !", error: error })
+        res.status(400).send({ message: "l'utilisateur ne peut pas se connecter", error: error })
     }
 })
 

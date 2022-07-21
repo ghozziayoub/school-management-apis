@@ -1,50 +1,80 @@
 const express = require("express");
-
 const Inscription = require("./../models/insctiption");
 const Training = require("./../models/training");
 
 const app = express();
 
-app.post("/", async (req, res) => {
+app.post("/:id", async (req, res) => {
   try {
+    let id = req.params.id
     let data = req.body;
-    let trainingId = await Training.findOne({ _id: data.trainingId });
-    if (trainingId) {
+    let trainingId = await Training.findOne({ _id: id });
+    let checkStudent = await Inscription.findOne({ email: data.email , trainingId: id})
+    if (trainingId && !checkStudent) {
       let inscription = new Inscription({
-        firstname: data.firstname,
-        lastname: data.lastname,
+        fullname: data.fullname,
         email: data.email,
         telephone: data.telephone,
-        trainingId: data.trainingId,
+        trainingId: id,
       });
+      console.log(inscription)
       await inscription.save();
       res.status(200).send({ messages: "inscription done !" });
     } else {
+      
       res
         .status(400)
-        .send({ message: "error fetching inscription !", error: error });
+        .send({ message: "utilisateur est deja inscript !" });
     }
   } catch (error) {
+    error= "error fetching inscription !"
     res
       .status(400)
-      .send({ message: "error fetching inscription !", error: error });
+      .send({ error});
   }
 });
 
-app.get("/", async (req, res) => {
+app.get("/:id", async (req, res) => {
   try {
+    let id = req.params.id
     let inscriptionList = [];
-    let inscriptions = await Inscription.find();
+    let inscriptions = await Inscription.find({trainingId: id});
     for (let i = 0; i < inscriptions.length; i++) {
       const element = inscriptions[i];
 
       const training = await Training.findOne({ _id: element._id });
       let inscription = {
         _id: element._id,
-        firstname: element.firstname,
-        lastname: element.lastname,
+        fullname: element.fullname,
         email: element.email,
         telephone: element.telephone,
+        createdAt:element.createdAt,
+        training,
+      };
+      inscriptionList.push(inscription);
+    }
+    res.status(200).send(inscriptionList);
+  } catch (error) {
+    res
+      .status(400)
+      .send({ message: "Error fetching inscriptions !", error: error });
+  }
+});
+app.get("inscription/:id", async (req, res) => {
+  try {
+    let id = req.params.id
+    let inscriptionList = [];
+    let inscriptions = await Inscription.find({trainingId: id});
+    for (let i = 0; i < inscriptions.length; i++) {
+      const element = inscriptions[i];
+
+      const training = await Training.findOne({ _id: element._id });
+      let inscription = {
+        _id: element._id,
+        fullname: element.fullname,
+        email: element.email,
+        telephone: element.telephone,
+        createdAt:element.createdAt,
         training,
       };
       inscriptionList.push(inscription);
@@ -57,7 +87,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/:id", async (req, res) => {
+app.get("inscriptions/:id", async (req, res) => {
   try {
     let inscriptionId = req.params.id;
     let inscription = await Inscription.findOne({ _id: inscriptionId });

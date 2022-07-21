@@ -2,13 +2,7 @@ const mongoose = require("mongoose");
 
 const InscriptionSchema = mongoose.Schema(
   {
-    firstname: {
-      type: String,
-      required: true,
-      min: 3,
-      max: 160,
-    },
-    lastname: {
+    fullname: {
       type: String,
       required: true,
       min: 3,
