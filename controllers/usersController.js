@@ -1,189 +1,177 @@
-const express = require("express")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const multer = require('multer')
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const multer = require("multer");
 
-const path = require('path');
+const path = require("path");
 
-const User = require('./../models/user')
+const User = require("./../models/user");
 
-const { isAuthorized } = require("./../middlewares/auth")
+const { isAuthorized } = require("./../middlewares/auth");
 
 // Set The Storage Engine
 const storage = multer.diskStorage({
+  destination: "./assets/images/users",
 
-    destination: './assets/images/users',
+  filename: function (req, file, cb) {
+    let name = req.body.firstname.replace(" ", "").toLowerCase();
 
-    filename: function(req, file, cb) {
-        let name = req.body.firstname.replace(' ', '').toLowerCase();
-
-        cb(null, name + '-' + Date.now() + path.extname(file.originalname));
-    }
+    cb(null, name + "-" + Date.now() + path.extname(file.originalname));
+  },
 });
 
 // Check File Type
 function checkFileType(file, cb) {
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
 
-    // Allowed ext
-    const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
-    // Check ext
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
 
-    // Check mime
-    const mimetype = filetypes.test(file.mimetype);
-
-    if (mimetype == true && extname == true) {
-        return cb(null, true);
-    } else {
-        cb('Error: Images Only!');
-    }
+  if (mimetype == true && extname == true) {
+    return cb(null, true);
+  } else {
+    cb("Error: Images Only!");
+  }
 }
 
 // Init Upload
 const upload = multer({
-
-    storage: storage,
-    limits: { fileSize: 1000000 },
-    fileFilter: function(req, file, cb) {
-        checkFileType(file, cb);
-    }
+  storage: storage,
+  limits: { fileSize: 1000000 },
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
 });
 
-const app = express()
+const app = express();
 
 // register API
-app.post('/', [upload.single("picture")], async(req, res) => {
-    try {
-        // 1 - recupération des données mel front
-        let data = req.body
-        let file = req.file
-            // 1.1 recupération du fichier
-        console.log(data)
-            // 2 - creation d'un objet User 
-            // 2.1 - data => user
-        let user = new User({
-            firstname: data.firstname,
-            lastname: data.lastname,
-            telephone: data.telephone,
-            image: file.filename,
-            email: data.email,
-            password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(10))
-        })
+app.post("/", [upload.single("picture")], async (req, res) => {
+  try {
+    // 1 - recupération des données mel front
+    let data = req.body;
+    let file = req.file;
+    // 1.1 recupération du fichier
+    console.log(data);
+    // 2 - creation d'un objet User
+    // 2.1 - data => user
+    let user = new User({
+      firstname: data.firstname,
+      lastname: data.lastname,
+      telephone: data.telephone,
+      image: file.filename,
+      email: data.email,
+      password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(10)),
+    });
 
-        // 3 - save lel objet
-        // 4 - return result to front , result => 201 or 400
-        await user.save()
+    // 3 - save lel objet
+    // 4 - return result to front , result => 201 or 400
+    await user.save();
 
-        res.status(201).send({ message: "user saved !" })
+    res.status(201).send({ message: "user saved !" });
+  } catch (error) {
+    res.status(400).send({ message: "user not saved !", error: error });
+  }
+});
 
-    } catch (error) {
-        res.status(400).send({ message: "user not saved !", error: error })
+app.post("/login", async (req, res) => {
+  try {
+    let data = req.body;
+
+    let user = await User.findOne({ email: data.email });
+
+    if (user) {
+      let userDetails = {
+        id: user._id,
+        fullname: user.firstname + " " + user.lastname,
+        email: user.email,
+        telephone: user.telephone,
+        password: user.password,
+        role: user.role,
+      };
+      let compare = bcrypt.compareSync(data.password, user.password);
+
+      if (compare) {
+        // 1 - creation mta3 token
+        // token => crypted string <= info
+        let dataToStoreInToken = {
+          id: user._id,
+          role: user.role,
+        };
+
+        let myToken = jwt.sign(dataToStoreInToken, "SECRET");
+        res.set("Access-Control-Expose-Headers", ["Authorization"]);
+        res.set("Authorization", myToken);
+        res.status(200).send({ message: "vous avez connecté", userDetails });
+      } else res.status(404).send({ message: "informations incorrectes" });
+    } else res.status(404).send({ message: "informations incorrectes!" });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .send({
+        message: "l'utilisateur ne peut pas se connecter",
+        error: error,
+      });
+  }
+});
+
+app.get("/", async (req, res) => {
+  try {
+    let users = await User.find();
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(400).send({ message: "Error fetching users !", error: error });
+  }
+});
+
+app.get("/:id", async (req, res) => {
+  try {
+    let userId = req.params.id;
+
+    let user = await User.findOne({ _id: userId });
+
+    if (user) res.status(200).send(user);
+    else res.status(404).send({ message: "User not found !" });
+  } catch (error) {
+    res.status(400).send({ message: "Error fetching users !", error: error });
+  }
+});
+
+app.patch("/:id", async (req, res) => {
+  try {
+    let userId = req.params.id;
+    let data = req.body;
+    let file = req.file;
+
+    if (data.hasOwnProperty("password")) {
+      data.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(10));
     }
 
-})
+    let user = await User.findOneAndUpdate({ _id: userId }, data);
 
-app.post('/login', async(req, res) => {
-    try {
+    if (user) res.status(200).send({ message: "User updated !" });
+    else res.status(404).send({ message: "User not found !" });
+  } catch (error) {
+    res.status(400).send({ message: "Error fetching users !", error: error });
+  }
+});
 
-        let data = req.body
+app.delete("/:id", async (req, res) => {
+  try {
+    let userId = req.params.id;
 
-        let user = await User.findOne({ email: data.email })
-        let userDetails = {
-            id:user._id,
-            fullname:user.firstname + " "+ user.lastname,
-            email:user.email,
-            telephone:user.telephone 
-        }
+    let user = await User.findOneAndDelete({ _id: userId });
 
-        if (user) {
-            let compare = bcrypt.compareSync(data.password, user.password)
+    if (user) res.status(200).send({ message: "User deleted !" });
+    else res.status(404).send({ message: "User not found !" });
+  } catch (error) {
+    res.status(400).send({ message: "Error fetching users !", error: error });
+  }
+});
 
-            if (compare) {
-                // 1 - creation mta3 token
-                // token => crypted string <= info
-                let dataToStoreInToken = {
-                    id: user._id,
-                    role: user.role
-                }
-
-                let myToken = jwt.sign(dataToStoreInToken, "SECRET")
-                res.set("Access-Control-Expose-Headers", ["Authorization"])
-                res.set("Authorization", myToken)
-                res.status(200).send({ message: "vous avez connecté", userDetails })
-
-            } else
-                res.status(404).send({ message: "informations incorrectes" })
-        } else
-            res.status(404).send({ message: "informations incorrectes!" })
-
-    } catch (error) {
-        res.status(400).send({ message: "l'utilisateur ne peut pas se connecter", error: error })
-    }
-})
-
-app.get('/', async(req, res) => {
-    try {
-        let users = await User.find()
-        res.status(200).send(users)
-    } catch (error) {
-        res.status(400).send({ message: "Error fetching users !", error: error })
-    }
-})
-
-app.get('/:id', async(req, res) => {
-    try {
-        let userId = req.params.id
-
-        let user = await User.findOne({ _id: userId })
-
-        if (user)
-            res.status(200).send(user)
-        else
-            res.status(404).send({ message: "User not found !" })
-
-    } catch (error) {
-        res.status(400).send({ message: "Error fetching users !", error: error })
-    }
-})
-
-app.patch('/:id', async(req, res) => {
-    try {
-        let userId = req.params.id
-        let data = req.body
-        let file = req.file
-
-        if (data.hasOwnProperty('password')) {
-            data.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(10))
-        }
-
-        let user = await User.findOneAndUpdate({ _id: userId }, data)
-
-        if (user)
-            res.status(200).send({ message: "User updated !" })
-        else
-            res.status(404).send({ message: "User not found !" })
-
-    } catch (error) {
-        res.status(400).send({ message: "Error fetching users !", error: error })
-    }
-
-})
-
-app.delete('/:id', async(req, res) => {
-    try {
-        let userId = req.params.id
-
-        let user = await User.findOneAndDelete({ _id: userId })
-
-        if (user)
-            res.status(200).send({ message: "User deleted !" })
-        else
-            res.status(404).send({ message: "User not found !" })
-
-    } catch (error) {
-        res.status(400).send({ message: "Error fetching users !", error: error })
-    }
-})
-
-module.exports = app
+module.exports = app;
