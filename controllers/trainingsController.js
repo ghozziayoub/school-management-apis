@@ -73,7 +73,7 @@ app.post("/", [upload.single("picture")], async (req, res) => {
   }
 });
 
-app.get("/", async (req, res) => {
+app.get("/all", async (req, res) => {
   try {
     let trainings = await Training.find();
     let allTrainings = [];
@@ -110,12 +110,49 @@ app.get("/", async (req, res) => {
   }
 });
 
+app.get("/", async (req, res) => {
+  try {
+    const today = new Date();
+    let trainings = await Training.find({ starting_date: {  $gt: today } });
+    let allTrainings = [];
+
+    for (let i = 0; i < trainings.length; i++) {
+      const element = trainings[i];
+
+      let trainer = await Trainer.findOne({ _id: element.idTrainer });
+      let category = await Category.findOne({ _id: element.idCategory });
+      let inscriptions = await Inscription.find({trainingId: element._id})
+      let training = {
+        _id: element._id,
+        name: element.name,
+        objectif: element.objectif,
+        program: element.program,
+        hours: element.hours,
+        image: element.image,
+        starting_date: element.starting_date,
+        price: element.price,
+        seat: element.seat,
+        trainer,
+        category,
+        inscriptions
+      };
+
+      allTrainings.push(training);
+    }
+
+    res.status(200).send(allTrainings);
+  } catch (error) {
+    res
+      .status(400)
+      .send({ message: "Error fetching trainings !", error: error });
+  }
+});
 
 app.get("/related/:category", async (req, res) => {
   try {
     let relatedCategory = req.params.category
     console.log(relatedCategory)
-    let trainings = await Training.find({idCategory: relatedCategory});
+    let trainings = await Training.find({idCategory: relatedCategory, starting_date: {  $gt: today } });
     console.log(trainings)
     let allTrainings = [];
 

@@ -14,6 +14,7 @@ const categoriesController = require("./controllers/categoriesController");
 const usersController = require("./controllers/usersController");
 const articleController = require("./controllers/articleController");
 const inscriptionController = require("./controllers/inscriptionController");
+const temoignageController = require("./controllers/temoignageController");
 
 // creation d'un objet express .
 const app = express();
@@ -35,6 +36,7 @@ app.use(express.static('./assets/images/trainers'));
 app.use(express.static('./assets/images/trainings'));
 app.use(express.static('./assets/images/categories'));
 app.use(express.static('./assets/images/articles'));
+app.use(express.static('./assets/images/temoignages'));
 
 // router
 app.use("/trainers", trainersController);
@@ -44,6 +46,7 @@ app.use("/categories", categoriesController);
 app.use("/article", articleController);
 app.use("/inscription", inscriptionController);
 app.use("/users", usersController);
+app.use("/temoignages", temoignageController);
 
 // create server
 app.listen(port, () => { console.log(`🟢 Server started on port ${port}`); });
