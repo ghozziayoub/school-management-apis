@@ -17,10 +17,19 @@ const trainingSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    idTrainer :{
-        type :String,
+    idTrainer: {
+        type: String,
+        required: true,
+    },
+    idCategory: {
+        type: String,
+        required: true,
+    },
+    image: {
+        type: String,
         required: true,
     }
+  
 })
 
 const Training = mongoose.model("training", trainingSchema)

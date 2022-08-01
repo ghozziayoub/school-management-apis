@@ -21,7 +21,23 @@ const trainerSchema = new mongoose.Schema({
     yearsOfExperience: {
         type: Number,
         required: true
-    }
+    },
+    facebook: {
+        type: String,
+        required: true
+    },
+    instagram: {
+        type: String,
+        required: true
+    },
+    twitter: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        required: true
+    },
 
 })
 

@@ -4,24 +4,25 @@ const Message = require('./../models/messages')
 
 const app = express()
 
-app.post('/', async(req, res) => {
+app.post('/', async (req, res) => {
     try {
         let data = req.body
         let messages = new Message({
             sender: data.sender,
+            email:data.email,
             title: data.title,
             content: data.content,
         })
         await messages.save()
-        res.status(200).send({ message: "add message works !" })
+        res.status(201).send({ message: "message saved !" })
 
     } catch (error) {
-        res.status(200).send({ message: "add message works !" })
+        res.status(400).send({ message: "add message faild !" })
     }
 })
 
 
-app.get('/', async(req, res) => {
+app.get('/', async (req, res) => {
     try {
         let messages = await Message.find()
         res.status(200).send(messages)
@@ -30,11 +31,7 @@ app.get('/', async(req, res) => {
     }
 })
 
-
-
-
-
-app.get('/:id', async(req, res) => {
+app.get('/:id', async (req, res) => {
     try {
         let messagesId = req.params.id
 
@@ -50,9 +47,7 @@ app.get('/:id', async(req, res) => {
     }
 })
 
-
-
-app.patch('/:id', async(req, res) => {
+app.patch('/:id', async (req, res) => {
     try {
         let messagesId = req.params.id
         let data = req.body
@@ -65,12 +60,12 @@ app.patch('/:id', async(req, res) => {
             res.status(404).send({ message: "Messages not found !" })
 
     } catch (error) {
-        res.status(400).send({ message: "Error fetching Training !", error: error })
+        res.status(400).send({ message: "Error updating Training !", error: error })
     }
 
 })
 
-app.delete('/:id', async(req, res) => {
+app.delete('/:id', async (req, res) => {
     try {
         let messagesId = req.params.id
 
@@ -82,7 +77,7 @@ app.delete('/:id', async(req, res) => {
             res.status(404).send({ message: "Messages not found !" })
 
     } catch (error) {
-        res.status(400).send({ message: "Error fetching messages !", error: error })
+        res.status(400).send({ message: "Error deleting messages !", error: error })
     }
 })
 
